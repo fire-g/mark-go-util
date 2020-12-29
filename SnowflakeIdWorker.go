@@ -2,7 +2,7 @@ package util
 
 import (
 	"errors"
-	"github.com/markGoUtil/logger"
+	"github.com/fire-g/mark-go-util/logger"
 	"sync"
 	"time"
 )
