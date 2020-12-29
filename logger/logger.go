@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -25,11 +26,14 @@ func init() {
 	Config = &LogConfig{
 		Dir: "./log/",
 	}
-	_ = os.Mkdir(Config.Dir, 0777)
+	err := os.MkdirAll(Config.Dir, 0777)
+	if err != nil {
+		log.Fatal(err)
+	}
 	now := time.Now()
 	//日志输出文件
 	file, err := os.OpenFile(
-		Config.Dir+"log_"+now.Format("2000_10_10")+".log",
+		Config.Dir+"log_"+strconv.Itoa(now.Year())+"_"+strconv.Itoa(int(now.Month()))+"_"+strconv.Itoa(now.Day())+".log",
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Fail to open error logger file:", err)
