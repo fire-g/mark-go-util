@@ -2,7 +2,7 @@ package util
 
 import (
 	"errors"
-	"knowlesea.top/account/logger"
+	"github.com/markGoUtil/logger"
 	"sync"
 	"time"
 )
