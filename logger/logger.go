@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"github.com/fire-g/mark-go-util/config"
 	"io"
 	"log"
 	"os"
@@ -13,31 +14,36 @@ var (
 	Error   *log.Logger
 	Fatal   *log.Logger
 	Warning *log.Logger
-	Config  *LogConfig
+	file    *os.File
+	err     error
 )
 
-//存储日志信息
-type LogConfig struct {
-	Dir string
-}
-
-func init() {
-	//初始化log配置
-	Config = &LogConfig{
-		Dir: "./log/",
-	}
-	err := os.MkdirAll(Config.Dir, 0777)
+//重新加载日志配置文件
+func ReloadLoggerConfig() {
+	err = os.MkdirAll(config.LoggerConfig.Dir, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func ReopenFile() {
 	now := time.Now()
+	var f *os.File
 	//日志输出文件
-	file, err := os.OpenFile(
-		Config.Dir+"log_"+strconv.Itoa(now.Year())+"_"+strconv.Itoa(int(now.Month()))+"_"+strconv.Itoa(now.Day())+".log",
+	f, err = os.OpenFile(
+		config.LoggerConfig.Dir+
+			"log_"+strconv.Itoa(now.Year())+"_"+strconv.Itoa(int(now.Month()))+"_"+strconv.Itoa(now.Day())+".log",
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Fail to open error logger file:", err)
 	}
+	file = f
+}
+
+func init() {
+	ReloadLoggerConfig()
+	ReopenFile()
+
 	//自定义日志格式
 	Info = log.New(io.MultiWriter(file, os.Stderr), "INFO: ", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
 	Error = log.New(io.MultiWriter(file, os.Stderr), "ERROR: ", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
