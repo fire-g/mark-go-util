@@ -40,7 +40,10 @@ func ReopenFile() {
 	file = f
 }
 
-func init() {
+//初始化日志
+//日志存储地址为LoggerConfig.Dir(默认为./log/)
+//必须调用此初始化函数才能使用日志
+func InitLogger() {
 	println("init logger...")
 	ReloadLoggerConfig()
 	ReopenFile()
