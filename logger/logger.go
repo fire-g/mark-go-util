@@ -4,6 +4,7 @@ import (
 	"io"
 	"log"
 	"os"
+	"time"
 )
 
 var (
@@ -11,11 +12,24 @@ var (
 	Error   *log.Logger
 	Fatal   *log.Logger
 	Warning *log.Logger
+	Config  *LogConfig
 )
 
+//存储日志信息
+type LogConfig struct {
+	Dir string
+}
+
 func init() {
+	//初始化log配置
+	Config = &LogConfig{
+		Dir: "./log/",
+	}
+	now := time.Now()
 	//日志输出文件
-	file, err := os.OpenFile("sys.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	file, err := os.OpenFile(
+		Config.Dir+"log_"+string(now.Year())+"_"+string(now.Month())+"_"+string(now.Day())+".log",
+		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Fail to open error logger file:", err)
 	}
