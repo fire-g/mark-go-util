@@ -25,10 +25,11 @@ func init() {
 	Config = &LogConfig{
 		Dir: "./log/",
 	}
+	_ = os.Mkdir(Config.Dir, 0777)
 	now := time.Now()
 	//日志输出文件
 	file, err := os.OpenFile(
-		Config.Dir+"log_"+string(now.Year())+"_"+string(now.Month())+"_"+string(now.Day())+".log",
+		Config.Dir+"log_"+now.Format("2000_10_10")+".log",
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Fail to open error logger file:", err)
