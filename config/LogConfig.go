@@ -10,6 +10,7 @@ var (
 )
 
 func init() {
+	println("init config...")
 	//初始化log配置
 	LoggerConfig = &LogConfig{
 		Dir: "./log/",

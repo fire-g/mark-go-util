@@ -41,6 +41,7 @@ func ReopenFile() {
 }
 
 func init() {
+	println("init logger...")
 	ReloadLoggerConfig()
 	ReopenFile()
 
