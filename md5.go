@@ -23,9 +23,10 @@ func IntToMd5Bytes(i int) [16]byte {
 }
 
 //整形转换成字节
-func IntToBytes(n int64) []byte {
+func IntToBytes(n int) []byte {
+	x := int64(n)
 	bytesBuffer := bytes.NewBuffer([]byte{})
-	_ = binary.Write(bytesBuffer, binary.BigEndian, n)
+	_ = binary.Write(bytesBuffer, binary.BigEndian, x)
 	return bytesBuffer.Bytes()
 }
 
