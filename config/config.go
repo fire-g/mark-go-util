@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	ProjectConfig *map[string]string
+	ProjectConfig map[string]string
 	Path          string
 )
 
@@ -46,6 +46,6 @@ func InitConfig() map[string]string {
 		}
 		config[key] = value
 	}
-	ProjectConfig = &config
+	ProjectConfig = config
 	return config
 }
