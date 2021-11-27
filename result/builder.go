@@ -1,7 +1,6 @@
 package result
 
 import (
-	"git.knowlesea.top/HaoTian/account/status"
 	"sync"
 )
 
@@ -18,7 +17,7 @@ func Builder() *builder {
 }
 
 func (b *builder) Success() *builder {
-	b.result.Code = status.OK
+	b.result.Code = OK
 	b.result.Message = "Success"
 	return b
 }

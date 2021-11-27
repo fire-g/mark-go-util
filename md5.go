@@ -22,7 +22,7 @@ func IntToMd5Bytes(i int) [16]byte {
 	return md5.Sum(data)
 }
 
-//整形转换成字节
+// IntToBytes 整形转换成字节
 func IntToBytes(n int) []byte {
 	x := int64(n)
 	bytesBuffer := bytes.NewBuffer([]byte{})
@@ -30,7 +30,7 @@ func IntToBytes(n int) []byte {
 	return bytesBuffer.Bytes()
 }
 
-//字节转换成整形
+// BytesToInt 字节转换成整形
 func BytesToInt(b []byte) int {
 	bytesBuffer := bytes.NewBuffer(b)
 

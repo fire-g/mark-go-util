@@ -50,7 +50,7 @@ var (
 func init() {
 	IdWorker, err = createWorker(0, 0)
 	if err != nil {
-		logger.Error.Println(err)
+		logger.Logger.Error.Println(err)
 		return
 	}
 }

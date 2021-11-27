@@ -2,9 +2,7 @@ package util
 
 import "strconv"
 
-/*
- * 将十进制数字转化为二进制字符串
- */
+// ConvertToBin 将十进制数字转化为二进制字符串
 func ConvertToBin(num int64) string {
 	s := ""
 	if num == 0 {

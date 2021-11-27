@@ -12,7 +12,7 @@ var (
 	Path          string
 )
 
-//读取key=value类型的配置文件
+// InitConfig 读取key=value类型的配置文件
 func InitConfig() map[string]string {
 	config := make(map[string]string)
 
