@@ -1,7 +1,6 @@
 package logger
 
 import (
-	"github.com/fire-g/mark-go-util/config"
 	"io"
 	"log"
 	"os"
@@ -10,47 +9,66 @@ import (
 )
 
 var (
-	Info    *log.Logger
-	Error   *log.Logger
-	Fatal   *log.Logger
-	Warning *log.Logger
-	file    *os.File
-	err     error
+	Logger Log
 )
 
-//重新加载日志配置文件
-func ReloadLoggerConfig() {
-	err = os.MkdirAll(config.LoggerConfig.Dir, 0777)
+type Log struct {
+	file    *os.File    //日志文件对象
+	dir     string      //日志存储路径
+	Info    *log.Logger //提示日志
+	Error   *log.Logger //错误日志
+	Fatal   *log.Logger //重大错误日志
+	Warning *log.Logger //警告日志
+	Debug   *log.Logger //错误日志
+}
+
+// Init 初始化日志
+// 日志存储地址为LoggerConfig.Dir(默认为./data/log/)
+// 必须调用此初始化函数才能使用日志，此函数在已在包init函数中调用
+func (l *Log) Init() {
+	l.ReloadLoggerConfig()
+	l.ReopenFile()
+
+	//自定义日志格式
+	l.Info = l.newLog("INFO")
+	l.Error = l.newLog("ERROR")
+	l.Warning = l.newLog("WARNING")
+	l.Debug = l.newLog("DEBUG")
+	l.Fatal = l.newLog("FATAL")
+	// 定时器;定时更新日志文件路径
+	go func() {
+
+	}()
+}
+
+func (l *Log) newLog(prefix string) *log.Logger {
+	format := log.Ldate | log.Ltime | log.Lmicroseconds | log.Lshortfile
+	return log.New(io.MultiWriter(l.file, os.Stderr), prefix+" ", format)
+}
+
+// SetLogDir 设置日志存储目录
+func (l *Log) SetLogDir(dir string) {
+	l.dir = dir
+}
+
+// ReloadLoggerConfig 重新加载日志配置文件
+func (l *Log) ReloadLoggerConfig() {
+	err := os.MkdirAll(l.dir, 0777)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
-func ReopenFile() {
+func (l *Log) ReopenFile() {
 	now := time.Now()
-	var f *os.File
+	var err error
+	now.Format("")
 	//日志输出文件
-	f, err = os.OpenFile(
-		config.LoggerConfig.Dir+
+	l.file, err = os.OpenFile(
+		l.dir+
 			"log_"+strconv.Itoa(now.Year())+"_"+strconv.Itoa(int(now.Month()))+"_"+strconv.Itoa(now.Day())+".log",
 		os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatalln("Fail to open error logger file:", err)
 	}
-	file = f
-}
-
-//初始化日志
-//日志存储地址为LoggerConfig.Dir(默认为./log/)
-//必须调用此初始化函数才能使用日志
-func InitLogger() {
-	println("init logger...")
-	ReloadLoggerConfig()
-	ReopenFile()
-
-	//自定义日志格式
-	Info = log.New(io.MultiWriter(file, os.Stderr), "INFO: ", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
-	Error = log.New(io.MultiWriter(file, os.Stderr), "ERROR: ", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
-	Fatal = log.New(io.MultiWriter(file, os.Stderr), "FATAL:", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
-	Warning = log.New(io.MultiWriter(file, os.Stderr), "WARNING:", log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
 }
