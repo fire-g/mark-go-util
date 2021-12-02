@@ -55,9 +55,7 @@ func init() {
 	}
 }
 
-/*
- * 构造
- */
+// SnowflakeIdWorker 构造
 type SnowflakeIdWorker struct {
 	mutex         sync.Mutex //添加互斥锁，确保并发安全
 	lastTimestamp int64      //上次生成ID的时间戳
@@ -66,11 +64,9 @@ type SnowflakeIdWorker struct {
 	sequence      int64      //毫秒内序列(0-4095)
 }
 
-/*
- * 创建SnowflakeIdWorker
- * workerId 工作ID (0~31)
- * dataCenterId 数据中心ID (0~31)
- */
+// createWorker 创建SnowflakeIdWorker
+// workerId 工作ID (0~31)
+// dataCenterId 数据中心ID (0~31)
 func createWorker(wId int64, dId int64) (*SnowflakeIdWorker, error) {
 	if wId < 0 || wId > maxWorkerId {
 		return nil, errors.New("Worker ID excess of quantity")
@@ -87,9 +83,7 @@ func createWorker(wId int64, dId int64) (*SnowflakeIdWorker, error) {
 	}, nil
 }
 
-/*
- * 获取ID
- */
+// NextId 获取ID
 func (w *SnowflakeIdWorker) NextId() int64 {
 	// 保障线程安全 加锁
 	w.mutex.Lock()

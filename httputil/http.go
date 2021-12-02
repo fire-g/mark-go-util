@@ -10,7 +10,7 @@ import (
 func SendBack(writer http.ResponseWriter, i interface{}) {
 	jsons, err := json.Marshal(i)
 	if err != nil {
-		logger.Error.Println(err)
+		logger.Logger.Error.Println(err)
 	}
 	_, _ = writer.Write(jsons)
 }

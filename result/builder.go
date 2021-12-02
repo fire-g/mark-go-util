@@ -23,7 +23,7 @@ func (b *builder) Success() *builder {
 }
 
 func (b *builder) ErrorCode(code int) *builder {
-	b.result.Code = code
+	b.result.Code = int64(code)
 	return b
 }
 
